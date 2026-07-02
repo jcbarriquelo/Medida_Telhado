@@ -583,12 +583,26 @@
       return div.innerHTML;
     }
 
-    function askLabel(message, example) {
-      const value = prompt(message, example || '');
+    function askLabel(message) {
+      const value = prompt(message, '');
 
       if (value === null) return null;
 
       return value.trim();
+    }
+
+    function formatMeasureLabel(value) {
+      let text = String(value || '').trim();
+
+      if (!text) return '';
+
+      text = text.replace(/\s+/g, '');
+
+      if (/m$/i.test(text)) {
+        return text.replace(/m$/i, 'm');
+      }
+
+      return text + 'm';
     }
 
     function handlePointerDown(event) {
@@ -606,7 +620,7 @@
       }
 
       if (tool === 'note') {
-        const label = askLabel('Digite a observação:', 'Ex.: chaminé, sombra, caixa d’água');
+        const label = askLabel('Digite a observação:');
 
         if (label !== null && label !== '') {
           annotations.push({
@@ -655,14 +669,16 @@
         drawing = false;
 
         if (distance(startPoint, endPoint) > 12) {
-          const label = askLabel('Informe a medida real:', 'Ex.: 4,30 m');
+          const label = askLabel('Informe a medida real:');
 
           if (label !== null && label !== '') {
+            const formattedLabel = formatMeasureLabel(label);
+
             annotations.push({
               type: 'measure',
               start: startPoint,
               end: endPoint,
-              label
+              label: formattedLabel
             });
 
             renderList();
