@@ -2,82 +2,83 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Marcador de Medidas de Telhado</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Medidas do Telhado</title>
   <style>
     :root {
-      --bg: #f4f6f8;
+      --bg: #f3f4f6;
       --panel: #ffffff;
-      --text: #1f2937;
+      --text: #111827;
       --muted: #6b7280;
       --border: #d1d5db;
-      --primary: #14532d;
-      --primary-2: #166534;
+      --green: #16a34a;
+      --green-dark: #14532d;
       --danger: #b91c1c;
-      --shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+      --shadow: 0 8px 24px rgba(15, 23, 42, 0.14);
     }
 
     * {
       box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    body {
+    html, body {
       margin: 0;
+      width: 100%;
+      min-height: 100%;
       font-family: Arial, Helvetica, sans-serif;
       background: var(--bg);
       color: var(--text);
+      overscroll-behavior: none;
+    }
+
+    body {
+      padding-bottom: env(safe-area-inset-bottom);
     }
 
     header {
-      padding: 16px 20px;
-      background: var(--primary);
+      background: var(--green-dark);
       color: white;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      flex-wrap: wrap;
+      padding: 14px 14px 12px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.18);
     }
 
     header h1 {
       margin: 0;
-      font-size: 20px;
+      font-size: 18px;
+      line-height: 1.2;
     }
 
     header p {
       margin: 4px 0 0;
-      font-size: 13px;
+      font-size: 12px;
       opacity: 0.9;
     }
 
     main {
-      display: grid;
-      grid-template-columns: 310px 1fr;
-      gap: 16px;
-      padding: 16px;
-      max-width: 1500px;
+      max-width: 1200px;
       margin: 0 auto;
+      padding: 10px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
     }
 
-    aside, section {
+    .toolbar,
+    .canvas-panel {
       background: var(--panel);
       border: 1px solid var(--border);
       border-radius: 14px;
       box-shadow: var(--shadow);
     }
 
-    aside {
-      padding: 16px;
-      height: fit-content;
-    }
-
-    .canvas-panel {
-      padding: 12px;
-      min-height: 70vh;
-    }
-
-    .field {
-      margin-bottom: 14px;
+    .toolbar {
+      padding: 10px;
+      display: grid;
+      gap: 10px;
     }
 
     label {
@@ -87,43 +88,51 @@
       margin-bottom: 6px;
     }
 
-    input[type="file"],
-    input[type="text"],
-    select {
+    input[type="file"] {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       border: 1px solid var(--border);
-      border-radius: 10px;
-      font-size: 14px;
+      border-radius: 12px;
+      font-size: 16px;
       background: white;
     }
 
-    input[type="color"] {
-      width: 100%;
-      height: 42px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 4px;
-      background: white;
+    .tools {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
     }
 
     button {
       border: 0;
-      border-radius: 10px;
-      padding: 10px 12px;
+      border-radius: 12px;
+      padding: 13px 10px;
       cursor: pointer;
       font-weight: 700;
-      font-size: 14px;
+      font-size: 15px;
       background: #e5e7eb;
       color: var(--text);
+      min-height: 48px;
     }
 
-    button:hover {
-      filter: brightness(0.96);
+    button:active {
+      transform: scale(0.985);
+    }
+
+    button.active {
+      background: #dcfce7;
+      color: var(--green-dark);
+      outline: 3px solid rgba(22, 163, 74, 0.25);
     }
 
     button.primary {
-      background: var(--primary-2);
+      background: var(--green);
       color: white;
     }
 
@@ -132,45 +141,18 @@
       color: white;
     }
 
-    button.active {
-      outline: 3px solid rgba(22, 101, 52, 0.25);
-      background: #dcfce7;
-      color: #14532d;
-    }
-
-    .button-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-bottom: 12px;
-    }
-
-    .button-stack {
-      display: grid;
-      gap: 8px;
-      margin-top: 8px;
-    }
-
-    .hint {
-      font-size: 12px;
-      color: var(--muted);
-      line-height: 1.45;
-      background: #f9fafb;
-      border: 1px solid var(--border);
-      padding: 10px;
-      border-radius: 10px;
-      margin: 10px 0;
-    }
-
     .status {
       font-size: 13px;
       padding: 10px;
-      border-radius: 10px;
-      background: #eff6ff;
-      color: #1e3a8a;
-      border: 1px solid #bfdbfe;
-      margin-bottom: 12px;
-      min-height: 38px;
+      border-radius: 12px;
+      background: #f0fdf4;
+      color: #14532d;
+      border: 1px solid #bbf7d0;
+      line-height: 1.35;
+    }
+
+    .canvas-panel {
+      padding: 8px;
     }
 
     .canvas-wrap {
@@ -185,11 +167,11 @@
       background-position: 0 0, 0 12px, 12px -12px, -12px 0;
       border: 1px dashed #cbd5e1;
       border-radius: 12px;
-      min-height: 65vh;
+      min-height: 52vh;
       display: flex;
       align-items: flex-start;
       justify-content: center;
-      padding: 10px;
+      padding: 8px;
       touch-action: none;
     }
 
@@ -198,7 +180,7 @@
       height: auto;
       background: white;
       border-radius: 8px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.16);
+      box-shadow: 0 3px 12px rgba(0,0,0,0.18);
       cursor: crosshair;
       touch-action: none;
     }
@@ -206,16 +188,16 @@
     .empty-state {
       color: var(--muted);
       text-align: center;
-      padding: 60px 20px;
-      line-height: 1.5;
+      padding: 52px 16px;
+      line-height: 1.45;
+      font-size: 14px;
     }
 
     .list {
-      margin-top: 12px;
-      max-height: 220px;
+      max-height: 145px;
       overflow: auto;
-      border-top: 1px solid var(--border);
-      padding-top: 10px;
+      display: grid;
+      gap: 6px;
     }
 
     .item {
@@ -224,9 +206,8 @@
       gap: 8px;
       align-items: center;
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 8px;
-      margin-bottom: 8px;
       font-size: 13px;
       background: #fafafa;
     }
@@ -235,36 +216,93 @@
       color: var(--muted);
       display: block;
       margin-top: 2px;
+      word-break: break-word;
     }
 
     .item button {
-      padding: 6px 8px;
+      min-height: 36px;
+      padding: 7px 9px;
       font-size: 12px;
     }
 
-    .footer-note {
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 10px;
-      line-height: 1.4;
+    .desktop-title {
+      display: none;
     }
 
-    @media (max-width: 900px) {
-      main {
-        grid-template-columns: 1fr;
+    @media (min-width: 920px) {
+      header {
+        position: static;
+        padding: 16px 20px;
       }
 
-      aside {
-        order: 2;
+      header h1 {
+        font-size: 21px;
+      }
+
+      header p {
+        font-size: 13px;
+      }
+
+      main {
+        grid-template-columns: 320px 1fr;
+        align-items: start;
+        padding: 16px;
+      }
+
+      .toolbar {
+        position: sticky;
+        top: 16px;
       }
 
       .canvas-panel {
-        order: 1;
+        min-height: 74vh;
+      }
+
+      .canvas-wrap {
+        min-height: 70vh;
+      }
+
+      .desktop-title {
+        display: block;
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.35;
+      }
+    }
+
+    @media (max-width: 520px) {
+      main {
+        padding: 8px;
+      }
+
+      .toolbar {
+        padding: 8px;
+        border-radius: 12px;
+      }
+
+      .canvas-panel {
+        padding: 6px;
+        border-radius: 12px;
+      }
+
+      .tools,
+      .actions {
+        gap: 6px;
+      }
+
+      button {
+        font-size: 14px;
+        padding: 12px 6px;
+      }
+
+      .canvas-wrap {
+        min-height: 50vh;
+        padding: 6px;
       }
     }
 
     @media print {
-      header, aside {
+      header, .toolbar {
         display: none;
       }
 
@@ -273,9 +311,10 @@
         padding: 0;
       }
 
-      section {
+      .canvas-panel {
         box-shadow: none;
         border: 0;
+        padding: 0;
       }
 
       .canvas-wrap {
@@ -293,74 +332,38 @@
 </head>
 <body>
   <header>
-    <div>
-      <h1>Marcador de Medidas de Telhado</h1>
-      <p>Envie a foto aérea/ortogonal, desenhe as faces e informe as medidas reais conferidas em campo.</p>
-    </div>
-    <div>
-      <button class="primary" id="btnExportTop">Baixar imagem marcada</button>
-    </div>
+    <h1>Medidas do Telhado</h1>
+    <p>Carregue a foto, marque as medidas e baixe a imagem anotada.</p>
   </header>
 
   <main>
-    <aside>
-      <div class="field">
-        <label for="imageInput">1. Imagem do telhado</label>
+    <section class="toolbar">
+      <div>
+        <label for="imageInput">Imagem do telhado</label>
         <input id="imageInput" type="file" accept="image/*" />
+      </div>
+
+      <div class="tools">
+        <button id="toolMeasure" class="active">Medida</button>
+        <button id="toolNote">Observação</button>
+        <button id="toolMove">Mover</button>
+      </div>
+
+      <div class="actions">
+        <button id="btnClear" class="danger">Limpar marcações</button>
+        <button id="btnExport" class="primary">Baixar imagem marcada</button>
       </div>
 
       <div class="status" id="statusBox">Carregue uma imagem para começar.</div>
 
-      <div class="field">
-        <label>2. Ferramenta</label>
-        <div class="button-grid">
-          <button id="toolMeasure" class="active">Medida</button>
-          <button id="toolFace">Face</button>
-          <button id="toolNote">Observação</button>
-          <button id="toolMove">Mover</button>
-        </div>
-      </div>
-
-      <div class="field">
-        <label for="defaultLabel">Texto padrão da próxima marcação</label>
-        <input id="defaultLabel" type="text" placeholder="Ex.: 4,30 m / Água 1 / obstáculo" />
-      </div>
-
-      <div class="field">
-        <label for="colorPicker">Cor das marcações</label>
-        <input id="colorPicker" type="color" value="#00a63e" />
-      </div>
-
-      <div class="hint">
-        <b>Como usar no campo:</b><br>
-        <b>Medida:</b> arraste de uma ponta à outra e informe o valor real, em metros.<br>
-        <b>Face:</b> toque nos cantos da água do telhado e depois clique em “Fechar face”.<br>
-        <b>Observação:</b> toque em um ponto da imagem e escreva uma nota.<br>
-        <b>Mover:</b> arraste uma marcação para reposicionar.
-      </div>
-
-      <div class="button-stack">
-        <button id="btnCloseFace">Fechar face</button>
-        <button id="btnUndo">Desfazer última marcação</button>
-        <button id="btnClear" class="danger">Limpar marcações</button>
-        <button id="btnExport" class="primary">Baixar imagem marcada</button>
-        <button id="btnSaveJson">Baixar dados JSON</button>
-        <button id="btnLoadJson">Carregar dados JSON</button>
-        <input id="jsonInput" type="file" accept="application/json" style="display:none" />
-      </div>
-
       <div class="list" id="annotationList"></div>
-
-      <div class="footer-note">
-        Tudo roda localmente no navegador. Nenhuma imagem é enviada para servidor.
-      </div>
-    </aside>
+    </section>
 
     <section class="canvas-panel">
       <div class="canvas-wrap" id="canvasWrap">
         <div class="empty-state" id="emptyState">
           Nenhuma imagem carregada.<br>
-          Use uma foto aérea/ortogonal do telhado, de preferência sem inclinação forte.
+          Use uma imagem aérea/ortogonal do telhado.
         </div>
         <canvas id="canvas" style="display:none"></canvas>
       </div>
@@ -368,19 +371,17 @@
   </main>
 
   <script>
+    const MARK_COLOR = '#16a34a';
+
     const imageInput = document.getElementById('imageInput');
-    const jsonInput = document.getElementById('jsonInput');
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
     const emptyState = document.getElementById('emptyState');
     const statusBox = document.getElementById('statusBox');
-    const defaultLabel = document.getElementById('defaultLabel');
-    const colorPicker = document.getElementById('colorPicker');
     const annotationList = document.getElementById('annotationList');
 
     const buttons = {
       measure: document.getElementById('toolMeasure'),
-      face: document.getElementById('toolFace'),
       note: document.getElementById('toolNote'),
       move: document.getElementById('toolMove')
     };
@@ -390,7 +391,6 @@
     let imageLoaded = false;
     let tool = 'measure';
     let annotations = [];
-    let currentFace = [];
     let drawing = false;
     let startPoint = null;
     let previewPoint = null;
@@ -403,27 +403,24 @@
 
     function setTool(nextTool) {
       tool = nextTool;
+
       Object.keys(buttons).forEach(key => {
         buttons[key].classList.toggle('active', key === nextTool);
       });
 
-      if (tool !== 'face' && currentFace.length > 0) {
-        setStatus('Face em andamento. Volte para “Face” e clique em “Fechar face”, ou desfaça.');
-      } else {
-        const labels = {
-          measure: 'Ferramenta medida: arraste sobre a borda ou distância que deseja informar.',
-          face: 'Ferramenta face: toque nos cantos da água do telhado. Depois clique em “Fechar face”.',
-          note: 'Ferramenta observação: toque no ponto da imagem onde deseja inserir a nota.',
-          move: 'Ferramenta mover: arraste uma marcação já criada.'
-        };
-        setStatus(labels[tool]);
-      }
+      const labels = {
+        measure: 'Medida: arraste sobre a borda do telhado e informe o valor real.',
+        note: 'Observação: toque no ponto da imagem e escreva a anotação.',
+        move: 'Mover: arraste uma marcação existente para ajustar a posição.'
+      };
 
+      setStatus(labels[tool]);
       draw();
     }
 
     function getPoint(event) {
       const rect = canvas.getBoundingClientRect();
+
       return {
         x: (event.clientX - rect.left) * canvas.width / rect.width,
         y: (event.clientY - rect.top) * canvas.height / rect.height
@@ -439,7 +436,7 @@
     }
 
     function drawArrow(from, to, color, width = 5) {
-      const headLength = 18;
+      const headLength = Math.max(14, Math.round(canvas.width * 0.012));
       const angle = Math.atan2(to.y - from.y, to.x - from.x);
 
       ctx.strokeStyle = color;
@@ -488,7 +485,7 @@
       const bx = Math.min(Math.max(x - w / 2, 4), canvas.width - w - 4);
       const by = Math.min(Math.max(y - h / 2, 4), canvas.height - h - 4);
 
-      ctx.fillStyle = 'rgba(255,255,255,0.92)';
+      ctx.fillStyle = 'rgba(255,255,255,0.94)';
       roundRect(ctx, bx, by, w, h, 8);
       ctx.fill();
 
@@ -512,68 +509,20 @@
       ctx.closePath();
     }
 
-    function drawFace(points, label, color, isPreview = false) {
-      if (points.length === 0) return;
-
-      ctx.lineWidth = isPreview ? 3 : 5;
-      ctx.strokeStyle = color;
-      ctx.fillStyle = isPreview ? 'rgba(0, 0, 0, 0.03)' : hexToRgba(color, 0.18);
-
-      ctx.beginPath();
-      ctx.moveTo(points[0].x, points[0].y);
-
-      for (let i = 1; i < points.length; i++) {
-        ctx.lineTo(points[i].x, points[i].y);
-      }
-
-      if (!isPreview && points.length >= 3) {
-        ctx.closePath();
-        ctx.fill();
-      }
-
-      ctx.stroke();
-
-      points.forEach(p => {
-        ctx.fillStyle = color;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, 7, 0, Math.PI * 2);
-        ctx.fill();
-      });
-
-      if (label && points.length >= 3) {
-        const center = polygonCenter(points);
-        drawLabel(label, center.x, center.y, color);
-      }
-    }
-
-    function hexToRgba(hex, alpha) {
-      const clean = hex.replace('#', '');
-      const bigint = parseInt(clean, 16);
-      const r = (bigint >> 16) & 255;
-      const g = (bigint >> 8) & 255;
-      const b = bigint & 255;
-      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-    }
-
-    function polygonCenter(points) {
-      const sum = points.reduce((acc, p) => ({ x: acc.x + p.x, y: acc.y + p.y }), { x: 0, y: 0 });
-      return { x: sum.x / points.length, y: sum.y / points.length };
-    }
-
     function drawNote(point, text, color) {
       ctx.fillStyle = color;
       ctx.beginPath();
-      ctx.arc(point.x, point.y, 9, 0, Math.PI * 2);
+      ctx.arc(point.x, point.y, 10, 0, Math.PI * 2);
       ctx.fill();
 
       ctx.fillStyle = 'white';
-      ctx.font = 'bold 14px Arial';
+      ctx.font = 'bold 15px Arial';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText('i', point.x, point.y + 1);
       ctx.textAlign = 'left';
 
-      drawLabel(text, point.x + 70, point.y - 20, color);
+      drawLabel(text, point.x + 70, point.y - 22, color);
     }
 
     function draw() {
@@ -584,62 +533,37 @@
 
       annotations.forEach(a => {
         if (a.type === 'measure') {
-          drawArrow(a.start, a.end, a.color);
+          drawArrow(a.start, a.end, MARK_COLOR);
           const mid = midPoint(a.start, a.end);
-          drawLabel(a.label, mid.x, mid.y - 26, a.color);
-        }
-
-        if (a.type === 'face') {
-          drawFace(a.points, a.label, a.color);
+          drawLabel(a.label, mid.x, mid.y - 26, MARK_COLOR);
         }
 
         if (a.type === 'note') {
-          drawNote(a.point, a.label, a.color);
+          drawNote(a.point, a.label, MARK_COLOR);
         }
       });
 
       if (drawing && startPoint && previewPoint && tool === 'measure') {
-        drawArrow(startPoint, previewPoint, colorPicker.value, 3);
-      }
-
-      if (currentFace.length > 0) {
-        drawFace(currentFace, '', colorPicker.value, true);
-        if (previewPoint && tool === 'face') {
-          const last = currentFace[currentFace.length - 1];
-          ctx.strokeStyle = colorPicker.value;
-          ctx.lineWidth = 2;
-          ctx.setLineDash([8, 8]);
-          ctx.beginPath();
-          ctx.moveTo(last.x, last.y);
-          ctx.lineTo(previewPoint.x, previewPoint.y);
-          ctx.stroke();
-          ctx.setLineDash([]);
-        }
+        drawArrow(startPoint, previewPoint, MARK_COLOR, 3);
       }
     }
 
     function renderList() {
       annotationList.innerHTML = '';
 
-      if (annotations.length === 0) {
-        annotationList.innerHTML = '<div class="hint">Nenhuma marcação criada ainda.</div>';
-        return;
-      }
-
       annotations.forEach((a, index) => {
         const item = document.createElement('div');
         item.className = 'item';
 
         const info = document.createElement('div');
-        const typeName = a.type === 'measure' ? 'Medida' : a.type === 'face' ? 'Face' : 'Observação';
+        const typeName = a.type === 'measure' ? 'Medida' : 'Observação';
         info.innerHTML = `<b>${index + 1}. ${typeName}</b><small>${escapeHtml(a.label || 'sem texto')}</small>`;
-
-        const actions = document.createElement('div');
 
         const edit = document.createElement('button');
         edit.textContent = 'Editar';
         edit.onclick = () => {
-          const novo = prompt('Editar texto da marcação:', a.label || '');
+          const novo = prompt('Editar texto:', a.label || '');
+
           if (novo !== null) {
             a.label = novo.trim();
             renderList();
@@ -647,18 +571,8 @@
           }
         };
 
-        const remove = document.createElement('button');
-        remove.textContent = 'Excluir';
-        remove.onclick = () => {
-          annotations.splice(index, 1);
-          renderList();
-          draw();
-        };
-
-        actions.appendChild(edit);
-        actions.appendChild(remove);
         item.appendChild(info);
-        item.appendChild(actions);
+        item.appendChild(edit);
         annotationList.appendChild(item);
       });
     }
@@ -669,15 +583,19 @@
       return div.innerHTML;
     }
 
-    function askLabel(defaultText, message) {
-      const value = prompt(message, defaultText || '');
+    function askLabel(message, example) {
+      const value = prompt(message, example || '');
+
       if (value === null) return null;
+
       return value.trim();
     }
 
     function handlePointerDown(event) {
       if (!imageLoaded) return;
+
       event.preventDefault();
+
       const p = getPoint(event);
       canvas.setPointerCapture(event.pointerId);
 
@@ -687,22 +605,16 @@
         previewPoint = p;
       }
 
-      if (tool === 'face') {
-        currentFace.push(p);
-        setStatus(`${currentFace.length} ponto(s) da face marcado(s). Clique em “Fechar face” quando terminar.`);
-        draw();
-      }
-
       if (tool === 'note') {
-        const label = askLabel(defaultLabel.value, 'Digite a observação:');
+        const label = askLabel('Digite a observação:', 'Ex.: chaminé, sombra, caixa d’água');
+
         if (label !== null && label !== '') {
           annotations.push({
             type: 'note',
             point: p,
-            label,
-            color: colorPicker.value
+            label
           });
-          defaultLabel.value = '';
+
           renderList();
           draw();
         }
@@ -716,6 +628,7 @@
 
     function handlePointerMove(event) {
       if (!imageLoaded) return;
+
       const p = getPoint(event);
 
       if (drawing && tool === 'measure') {
@@ -723,15 +636,12 @@
         draw();
       }
 
-      if (tool === 'face') {
-        previewPoint = p;
-        draw();
-      }
-
       if (tool === 'move' && movingIndex !== null && lastPointer) {
         const dx = p.x - lastPointer.x;
         const dy = p.y - lastPointer.y;
+
         moveAnnotation(annotations[movingIndex], dx, dy);
+
         lastPointer = p;
         draw();
       }
@@ -745,16 +655,16 @@
         drawing = false;
 
         if (distance(startPoint, endPoint) > 12) {
-          const label = askLabel(defaultLabel.value, 'Informe a medida real. Ex.: 4,30 m');
+          const label = askLabel('Informe a medida real:', 'Ex.: 4,30 m');
+
           if (label !== null && label !== '') {
             annotations.push({
               type: 'measure',
               start: startPoint,
               end: endPoint,
-              label,
-              color: colorPicker.value
+              label
             });
-            defaultLabel.value = '';
+
             renderList();
           }
         }
@@ -774,17 +684,15 @@
       for (let i = annotations.length - 1; i >= 0; i--) {
         const a = annotations[i];
 
-        if (a.type === 'note' && distance(a.point, point) < 40) return i;
+        if (a.type === 'note' && distance(a.point, point) < 45) {
+          return i;
+        }
 
         if (a.type === 'measure') {
           const d = distancePointToSegment(point, a.start, a.end);
-          if (d < 25) return i;
-        }
 
-        if (a.type === 'face') {
-          if (pointInPolygon(point, a.points)) return i;
-          for (const vertex of a.points) {
-            if (distance(vertex, point) < 30) return i;
+          if (d < 28) {
+            return i;
           }
         }
       }
@@ -794,6 +702,7 @@
 
     function distancePointToSegment(p, a, b) {
       const l2 = Math.pow(distance(a, b), 2);
+
       if (l2 === 0) return distance(p, a);
 
       let t = ((p.x - a.x) * (b.x - a.x) + (p.y - a.y) * (b.y - a.y)) / l2;
@@ -807,24 +716,6 @@
       return distance(p, projection);
     }
 
-    function pointInPolygon(point, vertices) {
-      let inside = false;
-
-      for (let i = 0, j = vertices.length - 1; i < vertices.length; j = i++) {
-        const xi = vertices[i].x;
-        const yi = vertices[i].y;
-        const xj = vertices[j].x;
-        const yj = vertices[j].y;
-
-        const intersect = ((yi > point.y) !== (yj > point.y)) &&
-          (point.x < (xj - xi) * (point.y - yi) / (yj - yi + 0.000001) + xi);
-
-        if (intersect) inside = !inside;
-      }
-
-      return inside;
-    }
-
     function moveAnnotation(a, dx, dy) {
       if (a.type === 'measure') {
         a.start.x += dx;
@@ -836,38 +727,6 @@
       if (a.type === 'note') {
         a.point.x += dx;
         a.point.y += dy;
-      }
-
-      if (a.type === 'face') {
-        a.points.forEach(p => {
-          p.x += dx;
-          p.y += dy;
-        });
-      }
-    }
-
-    function closeFace() {
-      if (!imageLoaded) return;
-
-      if (currentFace.length < 3) {
-        setStatus('Para fechar uma face, marque pelo menos 3 pontos.');
-        return;
-      }
-
-      const label = askLabel(defaultLabel.value, 'Nome da face. Ex.: Água 1 / Telhado frontal');
-      if (label !== null && label !== '') {
-        annotations.push({
-          type: 'face',
-          points: [...currentFace],
-          label,
-          color: colorPicker.value
-        });
-        currentFace = [];
-        previewPoint = null;
-        defaultLabel.value = '';
-        renderList();
-        setStatus('Face adicionada. Você pode continuar marcando medidas ou novas faces.');
-        draw();
       }
     }
 
@@ -886,104 +745,20 @@
       link.click();
     }
 
-    function saveJson() {
-      if (!imageLoaded) {
-        alert('Carregue uma imagem antes de salvar os dados.');
-        return;
-      }
-
-      const data = {
-        app: 'marcador-medidas-telhado',
-        version: '1.0',
-        imageName,
-        canvas: {
-          width: canvas.width,
-          height: canvas.height
-        },
-        annotations
-      };
-
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      const baseName = imageName.replace(/\.[^/.]+$/, '');
-      link.download = `${baseName}-medidas-telhado.json`;
-      link.href = url;
-      link.click();
-      URL.revokeObjectURL(url);
-    }
-
-    function loadJsonFile(file) {
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        try {
-          const data = JSON.parse(reader.result);
-
-          if (!data.annotations || !Array.isArray(data.annotations)) {
-            throw new Error('Arquivo inválido.');
-          }
-
-          if (!imageLoaded) {
-            alert('Carregue primeiro a imagem correspondente. Depois carregue o JSON.');
-            return;
-          }
-
-          const oldW = data.canvas?.width || canvas.width;
-          const oldH = data.canvas?.height || canvas.height;
-          const sx = canvas.width / oldW;
-          const sy = canvas.height / oldH;
-
-          annotations = data.annotations.map(a => scaleAnnotation(a, sx, sy));
-          currentFace = [];
-          renderList();
-          draw();
-          setStatus('Dados carregados. Confira se as marcações ficaram alinhadas com a imagem.');
-        } catch (error) {
-          alert('Não foi possível carregar o JSON. Verifique o arquivo.');
-        }
-      };
-
-      reader.readAsText(file);
-    }
-
-    function scaleAnnotation(a, sx, sy) {
-      const copy = JSON.parse(JSON.stringify(a));
-
-      if (copy.type === 'measure') {
-        copy.start.x *= sx;
-        copy.start.y *= sy;
-        copy.end.x *= sx;
-        copy.end.y *= sy;
-      }
-
-      if (copy.type === 'note') {
-        copy.point.x *= sx;
-        copy.point.y *= sy;
-      }
-
-      if (copy.type === 'face') {
-        copy.points.forEach(p => {
-          p.x *= sx;
-          p.y *= sy;
-        });
-      }
-
-      return copy;
-    }
-
     imageInput.addEventListener('change', event => {
       const file = event.target.files[0];
+
       if (!file) return;
 
       imageName = file.name;
+
       const reader = new FileReader();
 
       reader.onload = () => {
         img = new Image();
 
         img.onload = () => {
-          const maxCanvasSide = 2400;
+          const maxCanvasSide = 2200;
           let w = img.naturalWidth;
           let h = img.naturalHeight;
 
@@ -998,13 +773,12 @@
 
           imageLoaded = true;
           annotations = [];
-          currentFace = [];
           emptyState.style.display = 'none';
           canvas.style.display = 'block';
 
           renderList();
           setTool('measure');
-          setStatus('Imagem carregada. Arraste sobre uma borda para inserir a primeira medida.');
+          setStatus('Imagem carregada. Arraste sobre uma borda para inserir uma medida.');
           draw();
         };
 
@@ -1014,43 +788,20 @@
       reader.readAsDataURL(file);
     });
 
-    jsonInput.addEventListener('change', event => {
-      const file = event.target.files[0];
-      if (file) loadJsonFile(file);
-      jsonInput.value = '';
-    });
-
     canvas.addEventListener('pointerdown', handlePointerDown);
     canvas.addEventListener('pointermove', handlePointerMove);
     canvas.addEventListener('pointerup', handlePointerUp);
     canvas.addEventListener('pointercancel', handlePointerUp);
 
     buttons.measure.addEventListener('click', () => setTool('measure'));
-    buttons.face.addEventListener('click', () => setTool('face'));
     buttons.note.addEventListener('click', () => setTool('note'));
     buttons.move.addEventListener('click', () => setTool('move'));
-
-    document.getElementById('btnCloseFace').addEventListener('click', closeFace);
-
-    document.getElementById('btnUndo').addEventListener('click', () => {
-      if (currentFace.length > 0) {
-        currentFace.pop();
-        setStatus('Último ponto da face removido.');
-      } else {
-        annotations.pop();
-        setStatus('Última marcação removida.');
-      }
-
-      renderList();
-      draw();
-    });
 
     document.getElementById('btnClear').addEventListener('click', () => {
       if (!imageLoaded) return;
 
       if (confirm('Deseja remover todas as marcações?')) {
         annotations = [];
-        currentFace = [];
         renderList();
         draw();
         setStatus('Marcações removidas.');
@@ -1058,9 +809,6 @@
     });
 
     document.getElementById('btnExport').addEventListener('click', exportImage);
-    document.getElementById('btnExportTop').addEventListener('click', exportImage);
-    document.getElementById('btnSaveJson').addEventListener('click', saveJson);
-    document.getElementById('btnLoadJson').addEventListener('click', () => jsonInput.click());
 
     renderList();
   </script>
