@@ -354,7 +354,7 @@
         <button id="btnExport" class="primary">Baixar imagem marcada</button>
       </div>
 
-      <div class="status" id="statusBox">Carregue uma imagem para começar.</div>
+      <div class="status" id="statusBox">Carregue uma imagem.</div>
 
       <div class="list" id="annotationList"></div>
     </section>
@@ -363,7 +363,7 @@
       <div class="canvas-wrap" id="canvasWrap">
         <div class="empty-state" id="emptyState">
           Nenhuma imagem carregada.<br>
-          Use uma imagem aérea/ortogonal do telhado.
+          Use uma imagem do telhado.
         </div>
         <canvas id="canvas" style="display:none"></canvas>
       </div>
@@ -411,7 +411,7 @@
       const labels = {
         measure: 'Medida: arraste sobre a borda do telhado e informe o valor real.',
         note: 'Observação: toque no ponto da imagem e escreva a anotação.',
-        move: 'Mover: arraste uma marcação existente para ajustar a posição.'
+        move: 'Mover: arraste uma marcação/observação existente.'
       };
 
       setStatus(labels[tool]);
@@ -748,7 +748,7 @@
 
     function exportImage() {
       if (!imageLoaded) {
-        alert('Carregue uma imagem antes de exportar.');
+        alert('Carregue uma imagem.');
         return;
       }
 
@@ -794,7 +794,7 @@
 
           renderList();
           setTool('measure');
-          setStatus('Imagem carregada. Arraste sobre uma borda para inserir uma medida.');
+          setStatus('Imagem carregada. Insira uma medida.');
           draw();
         };
 
